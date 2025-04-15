@@ -30,7 +30,7 @@ WORKDIR /app
 COPY --from=builder /install/local /usr/local
 
 # 실제 Python 애플리케이션 코드 복사
-COPY . .
+COPY app/ /app/
 
 # ❌ .env 같은 민감한 파일은 복사하지 않음 (외부 환경변수로 주입)
 
