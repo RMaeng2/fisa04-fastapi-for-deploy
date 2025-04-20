@@ -46,7 +46,7 @@ http://<EC2_PUBLIC_IP>/docs  # Swagger 문서
 #### AWS
 1. VPC에서 생성한 보안 그룹이 EC2 인스턴스 생성 시 목록에 나타나지 않음  <br>
 문제 : 동일한 리전과 VPC에 생성한 보안 그룹이 EC2 인스턴스 생성 시 선택 목록에 나타나지 않음  <br>
-해결 : 기존 보안 그룹을 삭제하고, EC2 인스턴스 생성 중 새로 보안 그룹을 생성함으로써 문제 해결  <br>
+해결 : 기존 보안 그룹을 삭제하고, EC2 인스턴스 다시 만들면서 새로 보안 그룹을 생성함으로써 문제 해결  <br>
 
 2. AMI로 인스턴스를 생성하지 않고 시작 템플릿을 생성함  <br> 
 문제 : "AMI를 템플릿으로 사용"하라는 말을 보고, Launch Template 생성이 필요한 것으로 착각  <br>
@@ -75,3 +75,9 @@ Launch Template = EC2를 만들기 위한 템플릿 문서 (AMI + 인스턴스 �
 문제 : Jenkins가 sudo docker build, sudo docker run 같은 명령을 실행할 때 비밀번호 입력 요구로 자동화 실패 발생. <br>
 해결 : sudo visudo 명령으로 편집기 열고 아래 줄 추가하여 비밀번호 입력 없이 sudo 명령 실행 가능하도록 설정함: <br>
 `jenkins ALL=(ALL) NOPASSWD: ALL` : jenkins 사용자에게 모든 명령어를 비밀번호 없이 sudo로 실행할 수 있도록 허용 <br>
+
+4. Jenkins 서버의 Docker 명령어가 실패함 <br>
+문제: Jenkins 서버에서 docker start 명령이 실패하며 컨테이너가 작동하지 않음 <br>
+초기 추정: 인스턴스 타입의 리소스 부족으로 추정하여 t2.micro → t2.small로 변경 <br>
+원인: 실제 원인은 Docker 명령어에 사용된 컨테이너 이름이 잘못되어 해당 컨테이너를 찾지 못해 종료(shutdown)되었음 <br>
+해결: Jenkins의 빌드 스크립트에서 실제 컨테이너 이름과 일치하도록 수정함 <br>
